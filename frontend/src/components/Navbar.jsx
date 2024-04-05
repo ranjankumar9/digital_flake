@@ -38,7 +38,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="w-full relative">
       {/* Make the container relative */}
       <div className="flex items-center justify-between bg-purple-900 h-[60px] px-[30px] z-10">
         {/* Ensure the navbar is above other content */}

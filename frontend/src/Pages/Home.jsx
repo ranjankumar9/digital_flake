@@ -13,8 +13,8 @@ const Home = () => {
         <Sidebar />
         <div className="flex justify-center items-center w-full">
           <div className="flex flex-col items-center justify-center p-4">
-            <img src={logo} alt="logo" className="mix-blend-color-burn w-[150px]" /> 
-            <p className="text-center">Welcome To Digitalflake Admin</p>
+            <img src={logo} alt="logo" className="w-[180px]" /> 
+            <p className="text-center text-[20px]">Welcome To Digitalflake Admin</p>
           </div>
         </div>
       </div>

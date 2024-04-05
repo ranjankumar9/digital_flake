@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { RxDashboard } from "react-icons/rx";
-import {
-  BsBoxSeam,
-  BsCardChecklist,
-  BsCardList,
-  BsPencil,
-  BsTrash,
-} from "react-icons/bs"; // Importing icons
-import "react-data-grid/lib/styles.css";
+import { BsBoxSeam } from "react-icons/bs"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Modal, Select, Table, Input } from "antd";
@@ -18,19 +10,17 @@ import { FaEdit } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteCategoryData } from "../Redux/Category/action";
-import {
-  DeleteProductData,
-  EditProductData,
-  GetProductData,
-} from "../Redux/Product/action";
+import { DeleteProductData, EditProductData, GetProductData } from "../Redux/Product/action";
+
+
+
 const { Search } = Input;
 const { Option } = Select;
 
 const Products = () => {
   const dispatch = useDispatch();
-  const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
   const [deleteData, setDeleteData] = useState([]);
   const [open, setOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
@@ -45,7 +35,6 @@ const Products = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const GetDataFunction = (searchQuery = "") => {
-
     dispatch(GetProductData(searchQuery)).then((res) => {
       let searchData = res?.data?.data;
       if (searchData && searchData.length > 0) {
@@ -61,7 +50,6 @@ const Products = () => {
 
   const handleOk = () => {
     setConfirmLoading(true);
-    console.log(deleteData);
     dispatch(DeleteProductData(deleteData._id)).then((res) => {
       console.log(res);
       if (res.msg === "Product Data Deleted Successfully") {
@@ -88,9 +76,10 @@ const Products = () => {
       GetDataFunction(search);
     }
   }, [search, dispatch]);
-  useEffect(() => {
-    GetDataFunction();
-  }, [dispatch]);
+
+  // useEffect(() => {
+  //   GetDataFunction();
+  // }, [dispatch]);
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
@@ -159,7 +148,7 @@ const Products = () => {
     },
   ];
 
-  const rows = data.map((item) => ({
+  const rows = data?.map((item) => ({
     Id: item._id,
     Name: item.name,
     packsize: `${item.packsize}`,
@@ -201,10 +190,11 @@ const Products = () => {
 
     reader.readAsDataURL(file);
   };
-  // ---------------------------------------------------------------------Edit ====----------------------------------------
+
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
+
   const handleOk2 = () => {
     if (
       name === "" ||
@@ -236,12 +226,12 @@ const Products = () => {
       });
     }
   };
+
   const handleCancel2 = () => {
     setIsModalOpen2(false);
   };
 
   const handleEdit = (row) => {
-    // console.log("Edit clicked for row:", row);
     showModal2();
     setName(row.name);
     setCategory(row.category);
@@ -261,6 +251,7 @@ const Products = () => {
     setSearch(value);
     GetDataFunction(value);
   };
+
   return (
     <div className="flex flex-col h-screen">
       <ToastContainer position="top-right" reverseOrder={true} />
@@ -270,7 +261,7 @@ const Products = () => {
         <div className="flex w-full">
           <div className="flex flex-col p-2 w-full">
             <div className="shadow-lg border rounded-xl">
-              <div className="flex items-center justify-between py-3 px-6">
+              <div className="flex flex-col md:flex-row items-center justify-between py-3 px-6">
                 <div className="flex items-center gap-4">
                   <BsBoxSeam className="text-[20px]" />
                   <h3 className="text-[20px] font-bold">Product</h3>
@@ -280,22 +271,23 @@ const Products = () => {
                   onChange={(e) => setSearch(e.target.value)}
                   onSearch={handleSearch}
                   placeholder="Search by name...."
-                  className=" w-[50%] rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                  className=" w-full md:w-[50%] rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
                 <button
                   onClick={() => {
                     navigate("/add-products");
                   }}
-                  className="bg-purple-900 text-white px-3 py-1 rounded-md hover:bg-purple-800"
+                  className="bg-purple-900 text-white px-3 py-1 rounded-md hover:bg-purple-800 mt-4 md:mt-0"
                 >
                   Add New
                 </button>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto md:w-[560px] max-[426px]:w-[300px] max-[321px]:w-[230px] lg:w-full">
                 <Table
                   columns={columns}
                   dataSource={rows}
                   onChange={onChange}
+                  style={{ width: '100%' }}
                 />
               </div>
             </div>

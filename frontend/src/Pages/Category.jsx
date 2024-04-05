@@ -2,22 +2,16 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { RxDashboard } from "react-icons/rx";
-import { BsCardChecklist, BsCardList, BsPencil, BsTrash } from "react-icons/bs"; // Importing icons
-import "react-data-grid/lib/styles.css";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { IoWarning } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Button, Modal, Select, Table, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  DeleteCategoryData,
-  EditCategoryData,
-  GetCategoryData,
-} from "../Redux/Category/action";
-import { EditProductData } from "../Redux/Product/action";
+import { useDispatch } from "react-redux";
+import { DeleteCategoryData, EditCategoryData, GetCategoryData } from "../Redux/Category/action";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { IoWarning } from "react-icons/io5";
+import { BsBoxSeam } from "react-icons/bs";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -37,7 +31,6 @@ const Category = () => {
   const [search, setSearch] = useState("");
 
   const GetDataFunction = (searchQuery = "") => {
-
     dispatch(GetCategoryData(searchQuery)).then((res) => {
       let searchData = res?.data?.data;
       if (searchData && searchData.length > 0) {
@@ -46,7 +39,6 @@ const Category = () => {
       setData(searchData);
     });
   };
-  
 
   const showModal = () => {
     setOpen(true);
@@ -81,11 +73,6 @@ const Category = () => {
       GetDataFunction(search);
     }
   }, [search, dispatch]);
-  
-
-  useEffect(() => {
-    GetDataFunction();
-  }, [dispatch]);
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
@@ -95,34 +82,23 @@ const Category = () => {
     {
       title: "Id",
       dataIndex: "Id",
-      sorter: {
-        compare: (a, b) => a.Name - b.Name,
-        multiple: 3,
-      },
     },
     {
       title: "Name",
       dataIndex: "Name",
-      sorter: {
-        compare: (a, b) => a.Name - b.Name,
-        multiple: 3,
-      },
     },
     {
       title: "Description",
       dataIndex: "description",
-      sorter: {
-        compare: (a, b) => a.description - b.description,
-        multiple: 2,
-      },
     },
     {
-      title: "status",
+      title: "Status",
       dataIndex: "status",
-      sorter: {
-        compare: (a, b) => a.status - b.status,
-        multiple: 1,
-      },
+      render: (text) => (
+        <span style={{ color: text === "Active" ? "green" : "red" }}>
+          {text}
+        </span>
+      ),
     },
     {
       title: "Actions",
@@ -130,15 +106,12 @@ const Category = () => {
     },
   ];
 
-  const rows = data.map((item) => ({
+  const rows = data?.map((item) => ({
+    key: item._id,
     Id: item._id,
     Name: item.name,
     description: item.description,
-    status: (
-      <span style={{ color: item.status === "Active" ? "green" : "red" }}>
-        {item.status}
-      </span>
-    ),
+    status: item.status,
     actions: (
       <div className="flex">
         <FaEdit
@@ -201,16 +174,15 @@ const Category = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <ToastContainer position="top-right" reverseOrder={true} />
       <Navbar />
       <div className="flex flex-1">
         <Sidebar />
-        <div className="flex w-full">
-          <div className="flex flex-col p-2 w-full">
+        <div className="flex flex-col w-full">
+          <div className="p-2">
             <div className="shadow-lg border rounded-xl">
-              <div className="flex items-center justify-between py-3 px-6">
+            <div className="flex flex-col md:flex-row items-center justify-between py-3 px-6">
                 <div className="flex items-center gap-4">
-                  <RxDashboard className="text-[20px]" />
+                  <BsBoxSeam className="text-[20px]" />
                   <h3 className="text-[20px] font-bold">Category</h3>
                 </div>
                 <Search
@@ -218,18 +190,18 @@ const Category = () => {
                   onChange={(e) => setSearch(e.target.value)}
                   onSearch={handleSearch}
                   placeholder="Search by name...."
-                  className=" w-[50%] rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                  className=" w-full md:w-[50%] rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
                 <button
                   onClick={() => {
-                    navigate("/add-category");
+                    navigate("/add-products");
                   }}
-                  className="bg-purple-900 text-white px-3 py-1 rounded-md hover:bg-purple-800"
+                  className="bg-purple-900 text-white px-3 py-1 rounded-md hover:bg-purple-800 mt-4 md:mt-0"
                 >
                   Add New
                 </button>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto md:w-[560px] max-[426px]:w-[300px] max-[321px]:w-[230px] lg:w-full">
                 <Table columns={columns} dataSource={rows} onChange={onChange} />
               </div>
             </div>
@@ -237,7 +209,6 @@ const Category = () => {
         </div>
       </div>
       <Modal
-        className="m-auto text-center"
         title="Delete"
         width={300}
         open={open}
@@ -257,7 +228,6 @@ const Category = () => {
             </Button>
           </div>
         )}
-        // Set the width of the modal here
         style={{ width: "300px" }}
       >
         <div className="flex items-center justify-center gap-1">
@@ -265,7 +235,6 @@ const Category = () => {
           <p className="text-[16px]">Are You sure want to Delete ?</p>
         </div>
       </Modal>
-
       <Modal
         title="Edit"
         open={isModalOpen2}
@@ -298,6 +267,7 @@ const Category = () => {
           </Select>
         </div>
       </Modal>
+      <ToastContainer position="top-right" reverseOrder={true} />
     </div>
   );
 };
