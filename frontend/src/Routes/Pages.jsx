@@ -8,6 +8,8 @@ import Login from "../Pages/Authentication/Login";
 import { PrivateRoute } from "../components/PrivateRoute";
 import ForgotPassword from "../Pages/Authentication/ForgotPassword";
 import ResetPassword from "../Pages/Authentication/ResetPassword";
+import AddCategory from "../Pages/AddCategory";
+import AddProducts from "../Pages/AddProducts";
 
 const Pages = () => {
   return (
@@ -34,10 +36,26 @@ const Pages = () => {
           }
         />
         <Route
+          path="/add-category"
+          element={
+            <PrivateRoute>
+              <AddCategory />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/products"
           element={
             <PrivateRoute>
               <Products />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/add-products"
+          element={
+            <PrivateRoute>
+              <AddProducts />
             </PrivateRoute>
           }
         />

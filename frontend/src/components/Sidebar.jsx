@@ -19,10 +19,10 @@ const Sidebar = () => {
         >
           <div className="flex items-center gap-2">
             <IoHomeOutline />
-            <p className=" ">Home</p>
+            <p className="hidden md:block">Home</p>
           </div>
           <div
-            className={`text-[28px]  ${
+            className={`text-[28px] hidden md:block ${
               location.pathname === "/" ? "text-black" : "text-gray-500"
             }`}
           >
@@ -37,10 +37,10 @@ const Sidebar = () => {
         >
           <div className="flex items-center gap-2">
             <RxDashboard />
-            <p className=" ">Category</p>
+            <p className="hidden md:block">Category</p>
           </div>
           <div
-            className={`text-[28px]  ${
+            className={`text-[28px] hidden md:block ${
               location.pathname === "/category" ? "text-black" : "text-gray-500"
             }`}
           >
@@ -55,10 +55,10 @@ const Sidebar = () => {
         >
           <div className="flex items-center gap-2">
             <BsBoxSeam />
-            <p className=" ">Products</p>
+            <p className="hidden md:block">Products</p>
           </div>
           <div
-            className={`text-[28px]  ${
+            className={`text-[28px] hidden md:block ${
               location.pathname === "/products" ? "text-black" : "text-gray-500"
             }`}
           >
