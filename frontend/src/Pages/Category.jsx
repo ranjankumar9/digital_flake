@@ -194,7 +194,7 @@ const Category = () => {
                 />
                 <button
                   onClick={() => {
-                    navigate("/add-products");
+                    navigate("/add-category");
                   }}
                   className="bg-purple-900 text-white px-3 py-1 rounded-md hover:bg-purple-800 mt-4 md:mt-0"
                 >
